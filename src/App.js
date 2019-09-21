@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
 
 import Layout from './hoc/Layout/Layout';
-import Home from './components/Home/Home';
+import Home from './containers/Home/Home';
+import Repos from './containers/Repos/Repos';
 class App extends Component {
   render () {
     return (
       <div className="App">
         <Layout>
-          <Home />
+          <Switch>
+            <Route path="/repos/:username" component={Repos}/>
+            <Route path="/" exact component={Home}/>
+          </Switch>
         </Layout>
       </div>
     );

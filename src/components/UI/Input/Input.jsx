@@ -8,7 +8,9 @@ const input = (props) => {
       <input className={classes.InputElement} 
               type="text" 
               placeholder={props.placeholder} 
-              value={props.value} />
+              value={props.value} 
+              onChange={props.changed}
+              />
     </div>
   );
 };
