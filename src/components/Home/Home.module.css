@@ -1,0 +1,23 @@
+.Form {
+  display: flex;
+  /* width: 100%; */
+}
+
+.FormWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column;
+  width: 500px;
+  height: 500px;
+  margin: 0 auto;
+}
+
+.FormWrapper form {
+  display: flex;
+  align-items: center;
+}
+
+.FormWrapper p {
+  font-size: 2rem
+}
