@@ -8,11 +8,12 @@ import RepoTable from '../../components/RepoTable/RepoTable';
 import Modal from '../../components/UI/Modal/Modal';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
+import Avatar from '../../components/UI/Avatar/Avatar';
 import classes from './Repos.module.css'
-
 class Repos extends Component {
   state = {
     username: '',
+    avatarUrl: '',
     repos: [],
     loading: true, 
     showModal: false,
@@ -26,6 +27,7 @@ class Repos extends Component {
     const username = this.props.match.params.username
     const path = `/users/${username}/repos`
     this.fetchRepos(path)
+    this.fetchAvatar(username)
     this.setState({username: username})
   }
 
@@ -43,6 +45,15 @@ class Repos extends Component {
     });
   }
 
+  fetchAvatar = (username) => {
+    axios.get(`/users/${username}`)
+          .then(res => {
+            this.setState({avatarUrl: res.data.avatar_url})
+          })
+          .catch(err => {
+            console.log(err)
+          })
+  }  
   editClickedHandler = (event) => {
     const repo = this.state.repos.find(repo => repo.repo_id === event.target.value)
     this.setState({showModal: true, 
@@ -95,7 +106,7 @@ class Repos extends Component {
 
     if (!this.state.loading) {
       search = (
-        <div className={classes.ReposModal} >
+        <div className={classes.ReposSearch} >
           <form onSubmit={this.filterHandler}>
             <Input value={this.state.filter} changed={this.onFilterChangeHandler} placeholder="Search by Tag" />
           </form>
@@ -111,7 +122,10 @@ class Repos extends Component {
           </form>
           <Button btnType="Success" clicked={this.updateTagsHandler}>Update Tags</Button>
         </Modal>
-        {search}
+        <div className={classes.ReposSubNavbar}>
+          {search}
+          <Avatar imageUrl={this.state.avatarUrl}/>
+        </div>
         {fetchedRepos}
       </Aux>
     );
