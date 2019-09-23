@@ -7,6 +7,8 @@ import LoadingBar from '../../components/UI/LoadingBar/LoadingBar';
 import RepoTable from '../../components/RepoTable/RepoTable';
 import Modal from '../../components/UI/Modal/Modal';
 import Input from '../../components/UI/Input/Input';
+import Button from '../../components/UI/Button/Button';
+import classes from './Repos.module.css'
 
 class Repos extends Component {
   state = {
@@ -16,17 +18,19 @@ class Repos extends Component {
     showModal: false,
     repo_id: '',
     tags: '',
-    id: ''
+    id: '',
+    filter: ''
   }
 
   componentDidMount () {
     const username = this.props.match.params.username
-    this.fetchRepos(username)
+    const path = `/users/${username}/repos`
+    this.fetchRepos(path)
     this.setState({username: username})
   }
 
-  fetchRepos = (username) => {
-    axios.get(`/users/${username}/repos`)
+  fetchRepos = (path) => {
+    axios.get(path)
     .then(res => {
       const fetchedRepos =[];
       for (let key in res.data) {
@@ -67,25 +71,47 @@ class Repos extends Component {
             console.log(error)
             this.setState({showModal: false, repo_id: '', tags: '', id: ''})
           });
-
-    this.fetchRepos(this.state.username)
+    const path = `/users/${this.state.username}/repos`
+    this.fetchRepos(path)
   }
 
+  onFilterChangeHandler =(event) => {
+    console.log(this.state.filter)
+    this.setState({filter: event.target.value})
+  }
+
+  filterHandler = () => {
+    const path = `/users/${this.state.username}/tags/${this.state.filter}`
+    this.fetchRepos(path)
+  }
 
   render () {
     let fetchedRepos = null;
     
-    this.state.loading ? fetchedRepos = <LoadingBar /> : fetchedRepos = <RepoTable repos={this.state.repos} 
-                                                                                        clicked={this.editClickedHandler} />
+    this.state.loading ? fetchedRepos = (<LoadingBar />) : fetchedRepos = (<RepoTable repos={this.state.repos} 
+                                                                                        clicked={this.editClickedHandler} />)
+
+    let search = null
+
+    if (!this.state.loading) {
+      search = (
+        <div className={classes.ReposModal} >
+          <form onSubmit={this.filterHandler}>
+            <Input value={this.state.filter} changed={this.onFilterChangeHandler} placeholder="Search by Tag" />
+          </form>
+          <Button btnType="Success" clicked={this.filterHandler}>Search</Button>
+        </div>
+      )
+    }
     return (
       <Aux>
         <Modal show={this.state.showModal} modalClosed={this.closeModalHandler}>
-        <form onSubmit={this.updateTagsHandler}>
-          <Input value={this.state.tags} changed={this.onChangeTagHandler}/>
-        </form>
-          <button onClick={this.updateTagsHandler}>Upddate Tags</button>
+          <form onSubmit={this.updateTagsHandler}>
+            <Input value={this.state.tags} changed={this.onChangeTagHandler}/>
+          </form>
+          <Button btnType="Success" clicked={this.updateTagsHandler}>Update Tags</Button>
         </Modal>
-        <h1>This is the repo list</h1>
+        {search}
         {fetchedRepos}
       </Aux>
     );
