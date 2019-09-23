@@ -10,6 +10,9 @@ import Modal from '../../components/UI/Modal/Modal';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Avatar from '../../components/UI/Avatar/Avatar';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+
+
 import classes from './Repos.module.css'
 class Repos extends Component {
   state = {
@@ -140,4 +143,4 @@ class Repos extends Component {
   };
 };
 
-export default Repos;
+export default withErrorHandler(Repos, axios);
