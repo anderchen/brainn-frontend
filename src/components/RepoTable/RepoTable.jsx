@@ -12,12 +12,12 @@ import classes from './RepoTable.module.css';
 
 const RepoTable = (props) => {
   
-  const createData = (repository, description, language, tags, repo_id) => {
-    return { repository, description, language, tags, repo_id };
+  const createData = (repository, description, language, tags, repo_id, url) => {
+    return { repository, description, language, tags, repo_id, url };
   }
 
   const rows = props.repos.map(repo => (
-    createData(repo.repo_name, repo.description, repo.language, repo.tags.map(e => e.name).join(', '), repo.repo_id)
+    createData(repo.repo_name, repo.description, repo.language, repo.tags.map(e => e.name).join(', '), repo.repo_id, repo.url)
   ))
 
   return (
@@ -36,7 +36,9 @@ const RepoTable = (props) => {
           {rows.map(row => (
             <TableRow key={row.repository}>
               <TableCell>
-                {row.repository}
+                <a href={row.url} target="_blank">
+                  {row.repository}
+                </a>
               </TableCell>
               <TableCell component="th" scope="row">{row.description}</TableCell>
               <TableCell>{row.language}</TableCell>
