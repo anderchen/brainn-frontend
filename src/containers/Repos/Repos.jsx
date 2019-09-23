@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import axios from '../../Axios';
 
@@ -24,6 +25,7 @@ class Repos extends Component {
   }
 
   componentDidMount () {
+    console.log(this.props)
     const username = this.props.match.params.username
     const path = `/users/${username}/repos`
     this.fetchRepos(path)
@@ -98,13 +100,14 @@ class Repos extends Component {
 
   render () {
     let fetchedRepos = null;
-    
-    this.state.loading ? fetchedRepos = (<LoadingBar />) : fetchedRepos = (<RepoTable repos={this.state.repos} 
-                                                                                        clicked={this.editClickedHandler} />)
+    let search = null;
+    let avatar = null;
+    let homeBtn = null;
 
-    let search = null
-
-    if (!this.state.loading) {
+    if (this.state.loading) {
+      fetchedRepos = (<LoadingBar />)
+    } else {
+      fetchedRepos = (<RepoTable repos={this.state.repos}  clicked={this.editClickedHandler} />)
       search = (
         <div className={classes.ReposSearch} >
           <form onSubmit={this.filterHandler}>
@@ -113,6 +116,10 @@ class Repos extends Component {
           <Button btnType="Success" clicked={this.filterHandler}>Search</Button>
         </div>
       )
+      avatar = (<Avatar imageUrl={this.state.avatarUrl}/>)
+
+      homeBtn = (<NavLink to="/">HOME</NavLink>)
+
     }
     return (
       <Aux>
@@ -124,7 +131,8 @@ class Repos extends Component {
         </Modal>
         <div className={classes.ReposSubNavbar}>
           {search}
-          <Avatar imageUrl={this.state.avatarUrl}/>
+          {avatar}
+          {homeBtn}
         </div>
         {fetchedRepos}
       </Aux>
