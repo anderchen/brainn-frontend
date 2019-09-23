@@ -36,7 +36,7 @@ const RepoTable = (props) => {
           {rows.map(row => (
             <TableRow key={row.repository}>
               <TableCell>
-                <a href={row.url} target="_blank">
+                <a href={row.url} target="_blank" rel="noopener noreferrer">
                   {row.repository}
                 </a>
               </TableCell>
