@@ -4,8 +4,10 @@
 }
 
 .AvatarLarge {
-  width: 56px;
+  width: 100px;
   border-radius: 50%;
+  position: relative;
+  right: 13.5%;
 }
 
 .AvatarBordered {
