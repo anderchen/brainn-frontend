@@ -28,7 +28,7 @@ class Repos extends Component {
   }
 
   componentDidMount () {
-    console.log(this.props)
+    // console.log(this.props)
     const username = this.props.match.params.username
     const path = `/users/${username}/repos`
     this.fetchRepos(path)
